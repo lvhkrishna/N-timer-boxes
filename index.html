@@ -13,7 +13,7 @@
 </head>
 <body>
     
-    <input id="user-input" type="number" class="form-control col-3" />
+    <input id="user-input" type="number" min="1" max="9" class="form-control col-3" />
     <button id="submit-button" class="btn" type="button" onclick="concentric()">Submit</button>
     <div class="col-12 main-div"></div>
     <div class="col-12 counter-div"></div>
@@ -34,25 +34,30 @@
             $(".counter-div").empty();
             
             var userValue = $("#user-input").val()
-            var size = 20 * userValue;
-            
-            var concContainer = $(".main-div");
-            var counterContainer = $(".counter-div");
-            var boxes = {};
-            var intervals = [];
-            
-            for(var i=1;i<=userValue;i++){
-                var randomColor = '#'+ ('000000' + Math.floor(Math.random()*16777215).toString(16)).slice(-6);
-                if(i == 1){
-                    concContainer.append('<div class="box'+i+'" style="width:'+size+'px;height:'+size+'px;position:relative;background-color:'+randomColor+';">');
+            if(parseInt(userValue) < 1 || parseInt(userValue) > 9){
+                alert("NOTE: Only the values between 1 and 9 are accepted");
+            }
+            else{
+                var size = 20 * userValue;
+
+                var concContainer = $(".main-div");
+                var counterContainer = $(".counter-div");
+                var boxes = {};
+                var intervals = [];
+
+                for(var i=1;i<=userValue;i++){
+                    var randomColor = '#'+ ('000000' + Math.floor(Math.random()*16777215).toString(16)).slice(-6);
+                    if(i == 1){
+                        concContainer.append('<div class="box'+i+'" style="width:'+size+'px;height:'+size+'px;position:relative;background-color:'+randomColor+';">');
+                    }
+                    else{
+                        $('.box'+(i-1)).append('<div class="box'+i+'" style="width:'+size+'px;height:'+size+'px;position:absolute;top:10px;left:10px;background-color:'+randomColor+';">');
+                    }
+                    size -= 20;
+                    boxes['box'+i] = 0;
+                    counterContainer.append('<div class="col-12 counter'+i+'">'+ ('box'+i) + ' : <span class="count'+i+'">'+boxes["box"+i]+'</span></div>');
+                    intervals[i-1] = '';
                 }
-                else{
-                    $('.box'+(i-1)).append('<div class="box'+i+'" style="width:'+size+'px;height:'+size+'px;position:absolute;top:10px;left:10px;background-color:'+randomColor+';">');
-                }
-                size -= 20;
-                boxes['box'+i] = 0;
-                counterContainer.append('<div class="col-12 counter'+i+'">'+ ('box'+i) + ' : <span class="count'+i+'">'+boxes["box"+i]+'</span></div>');
-                intervals[i-1] = '';
             }
             
             $(".main-div div[class*=box]").on('mouseenter', function(){
