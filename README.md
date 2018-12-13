@@ -1,5 +1,5 @@
 # N-timer-boxes
-Increff Assignment.
+Increff Assignment - 
 Arranged Concentric boxes centrally Aligned and Stacked based on user input.
 Each box is given a name and its own time counter in seconds.
 Time counter starts when cursor is on a box and stops when cursor leaves it.
