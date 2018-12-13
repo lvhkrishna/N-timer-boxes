@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, user-scalable=yes" />
+    <title>Increff</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel=stylesheet href="main.css">
+
+</head>
+<body>
+    
+    <input id="user-input" type="number" class="form-control col-3" />
+    <button id="submit-button" class="btn" type="button" onclick="concentric()">Submit</button>
+    <div class="col-12 main-div"></div>
+    <div class="col-12 counter-div"></div>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    
+    <script>
+        function concentric(){
+            $(".main-div").empty();
+            $(".counter-div").empty();
+            
+            var userValue = $("#user-input").val()
+            var size = 20 * userValue;
+            
+            var concContainer = $(".main-div");
+            var counterContainer = $(".counter-div");
+            var boxes = {};
+            var intervals = [];
+            
+            for(var i=1;i<=userValue;i++){
+                var randomColor = '#'+ ('000000' + Math.floor(Math.random()*16777215).toString(16)).slice(-6);
+                if(i == 1){
+                    concContainer.append('<div class="box'+i+'" style="width:'+size+'px;height:'+size+'px;position:relative;background-color:'+randomColor+';">');
+                }
+                else{
+                    $('.box'+(i-1)).append('<div class="box'+i+'" style="width:'+size+'px;height:'+size+'px;position:absolute;top:10px;left:10px;background-color:'+randomColor+';">');
+                }
+                size -= 20;
+                boxes['box'+i] = 0;
+                counterContainer.append('<div class="col-12 counter'+i+'">'+ ('box'+i) + ' : <span class="count'+i+'">'+boxes["box"+i]+'</span></div>');
+                intervals[i-1] = '';
+            }
+            
+            $(".main-div div[class*=box]").on('mouseenter', function(){
+                var hoverClass = $(this).attr('class');
+                var idx = hoverClass[hoverClass.length-1]
+                var val = parseInt($('.count'+idx).html());
+                clearInterval(intervals[parseInt(idx)-2]);
+                intervals[parseInt(idx)-1] = setInterval(function() {
+                    val++;
+                    $('.count'+idx).html(val);
+                }, 1000);
+            });
+            $(".main-div div[class*=box]").on('mouseleave', function(){
+                var hoverClass = $(this).attr('class');
+                var idx = hoverClass[hoverClass.length-1];
+                var val = parseInt($('.count'+(idx-1)).html());
+                clearInterval(intervals[parseInt(idx)-1]);
+                if(idx > 1){
+                    intervals[parseInt(idx)-2] = setInterval(function() {
+                        val++;
+                        $('.count'+(idx-1)).html(val);
+                    }, 1000);
+                }
+            });
+            
+            $(".main-div .box1").click(
+                function(ev){
+                    var target = $(ev.target);
+                    var elId = target.attr('class');
+                    alert(elId);
+                }
+            );
+        }
+    </script>
+
+</body>
+</html>

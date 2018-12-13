@@ -1,0 +1,16 @@
+#user-input{
+    float: left;
+}
+
+#submit-button{
+    margin-left: 10px;
+}
+
+.main-div{
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.counter-div{
+    display: inline-block;
+}
